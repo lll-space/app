@@ -48,6 +48,15 @@ export function useTelegramAuth() {
     })
       .then(async (r) => {
         if (!r.ok) throw new Error('auth failed');
+
+        // lightweight check-in: ensures botChatId is set and updates last seen
+        fetch('/api/checkin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({})
+        }).catch(() => null);
+
         setAuthState(AuthenticationState.Authenticated);
       })
       .catch(() => {
