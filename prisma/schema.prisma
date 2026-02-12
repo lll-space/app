@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  telegramId   String   @unique @map("telegram_id")
+
+  username     String?
+  firstName    String?  @map("first_name")
+  lastName     String?  @map("last_name")
+  photoUrl     String?  @map("photo_url")
+  languageCode String?  @map("language_code")
+
+  botChatId    String?  @map("bot_chat_id")
+  walletAddress String? @map("wallet_address")
+
+  referralCode String?  @unique @map("referral_code")
+  referredBy   String?  @map("referred_by")
+  referredUser User?    @relation("ReferralRelation", fields: [referredBy], references: [id], onDelete: SetNull)
+  referrals    User[]   @relation("ReferralRelation")
+  referralCount Int     @default(0) @map("referral_count")
+
+  isAdmin      Boolean  @default(false) @map("is_admin")
+
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
