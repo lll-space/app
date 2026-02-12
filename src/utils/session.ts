@@ -12,7 +12,8 @@ export interface TelegramProfile {
 export interface TelegramSession {
   userId?: string; // internal User.id (uuid)
   telegramId?: string; // telegram user id (stringified)
-  tg?: { user: unknown; chat?: unknown; auth_date?: number };
+  // Keep auth_date flexible: lib may provide Date or number.
+  tg?: { user: unknown; chat?: unknown; auth_date?: number | Date };
   profile?: TelegramProfile;
 }
 

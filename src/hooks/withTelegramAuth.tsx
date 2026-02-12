@@ -3,7 +3,7 @@
 import type { ComponentType } from 'react';
 import { useTelegramAuth, AuthenticationState } from './useTelegramAuth';
 
-export function withTelegramAuth<P>(WrappedComponent: ComponentType<P>, allowPublic = false) {
+export function withTelegramAuth<P extends object>(WrappedComponent: ComponentType<P>, allowPublic = false) {
   const botId = process.env.NEXT_PUBLIC_TELEGRAM_BOT_ID ?? 'LLL_Space_Bot';
   const botUrl = `https://t.me/${botId}`;
 
@@ -26,7 +26,7 @@ export function withTelegramAuth<P>(WrappedComponent: ComponentType<P>, allowPub
       );
     }
 
-    return <WrappedComponent {...props} />;
+    return <WrappedComponent {...(props as P)} />;
   }
 
   return TelegramAuthWrapper;
