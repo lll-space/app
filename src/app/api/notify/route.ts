@@ -33,8 +33,10 @@ export async function POST(req: NextRequest) {
     let chatId = parsed.data.chatId ?? null;
 
     if (!chatId && parsed.data.telegramId) {
-      const user = await prisma.user.findUnique({ where: { telegramId: parsed.data.telegramId } });
-      chatId = user?.botChatId ?? null;
+      const tgId = parsed.data.telegramId;
+      const user = await prisma.user.findUnique({ where: { telegramId: tgId } });
+      // Fallback: telegram user id is a valid chat_id for 1:1 bot chats (after user starts the bot).
+      chatId = user?.botChatId ?? tgId;
     }
 
     if (!chatId) {
