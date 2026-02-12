@@ -57,7 +57,9 @@ export async function POST(req: NextRequest) {
           referralCode: generateReferralCode(),
           referredBy: referredById || undefined,
           languageCode: data.user.language_code || 'en',
-          botChatId: data.chat?.id ? String(data.chat.id) : undefined
+          // In many mini-app contexts, `data.chat` may be missing.
+          // For 1:1 bot notifications, the user's telegramId can be used as chat_id once they started the bot.
+          botChatId: data.chat?.id ? String(data.chat.id) : telegramId
         }
       });
 
@@ -75,7 +77,7 @@ export async function POST(req: NextRequest) {
           firstName: data.user.first_name,
           lastName: data.user.last_name,
           photoUrl: data.user.photo_url,
-          botChatId: data.chat?.id ? String(data.chat.id) : undefined,
+          botChatId: data.chat?.id ? String(data.chat.id) : user.botChatId ?? telegramId,
           referralCode: user.referralCode || generateReferralCode()
         }
       });
