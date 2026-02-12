@@ -11,3 +11,4 @@ prisma/dev.db
 
 # local outputs
 /tmp
+tsconfig.tsbuildinfo
